@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Converters;
 using Optix.Movies.Infrastructure.Configuration;
 using Optix.Movies.Infrastructure.Database;
 using Optix.Movies.Infrastructure.Models;
@@ -26,9 +27,11 @@ builder.Services.AddDbContext<MoviesContext>(options =>
 builder.Services.AddLogging();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.Load("Optix.Movies.Application")));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+        options.SerializerSettings.Converters.Add(new StringEnumConverter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGenNewtonsoftSupport();
 
 var app = builder.Build();
 
