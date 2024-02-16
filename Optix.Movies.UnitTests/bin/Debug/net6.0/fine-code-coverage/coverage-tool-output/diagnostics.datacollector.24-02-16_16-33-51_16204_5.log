@@ -1,0 +1,7 @@
+TpTrace Verbose: 0 : 6596, 1, 2024/02/16, 16:33:52.074, 3760425177968, datacollector.dll, Version: 17.7.0-preview-23364-03+bc17bb9693cfc4778ded51aa0ab7f1065433f989
+TpTrace Information: 0 : 6596, 1, 2024/02/16, 16:33:52.096, 3760425399972, datacollector.dll, DataCollectorMain.Run: Starting data collector run with args: --port,12714,--parentprocessid,50244,--diag,C:\git\testing\Optix\Optix.Movies.UnitTests\bin\Debug\net6.0\fine-code-coverage\coverage-tool-output\diagnostics.datacollector.24-02-16_16-33-51_16204_5.log,--tracelevel,4
+TpTrace Information: 0 : 6596, 1, 2024/02/16, 16:33:52.116, 3760425596606, datacollector.dll, DataCollector: Monitoring parent process with id: '50244'
+TpTrace Information: 0 : 6596, 1, 2024/02/16, 16:33:52.145, 3760425885309, datacollector.dll, Trying to connect to server on socket : 127.0.0.1:12714 
+TpTrace Verbose: 0 : 6596, 1, 2024/02/16, 16:33:52.181, 3760426248305, datacollector.dll, SocketCommunicationManager : SetupClientAsync : Attempting to connect to the server.
+TpTrace Information: 0 : 6596, 6, 2024/02/16, 16:33:52.244, 3760426879515, datacollector.dll, Connected to the server successfully 
+TpTrace Information: 0 : 6596, 6, 2024/02/16, 16:33:52.244, 3760426883341, datacollector.dll, Using the buffer size of 16384 bytes
