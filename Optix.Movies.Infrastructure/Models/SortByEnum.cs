@@ -5,6 +5,8 @@
         Title,
         Overview,
         OriginalLanguage,
-        Genre
+        Genre,
+        VoteAverage,
+        ReleaseDate
     }
 }

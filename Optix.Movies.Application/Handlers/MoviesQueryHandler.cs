@@ -27,6 +27,7 @@ namespace Optix.Movies.Infrastructure.Models
             List<Movie> response = null;
             try
             {
+
                 if (!string.IsNullOrEmpty(query.SearchTerm))
                 {
                     response = await _context.Movies.Where(x =>
@@ -36,7 +37,7 @@ namespace Optix.Movies.Infrastructure.Models
                 }
                 else
                 {
-                    response = response = await _context.Movies.ToListAsync(cancellationToken);
+                    response = await _context.Movies.ToListAsync(cancellationToken);
                 }
 
                 response = SortResponse(query, response);
@@ -57,27 +58,30 @@ namespace Optix.Movies.Infrastructure.Models
 
         private static List<Movie> SortResponse(MoviesQuery query, List<Movie> currentResponse)
         {
-            var orderExpression = ExtractOrderExpression(query);
-            var response = new List<Movie>();
-            switch (query.SortDirection)
+            var (orderExpression, type) = ExtractOrderExpression(query);
+
+            return (query.SortDirection, query.SortBy)
+            switch
             {
-                case SortDirection.Ascending:
-                    response = currentResponse.AsQueryable().OrderBy(orderExpression).ToList();
-                    break;
-                case SortDirection.Descending:
-                    response = currentResponse.AsQueryable().OrderByDescending(orderExpression).ToList();
-                    break;
-            }
-            return response;
+                (SortDirection.Ascending, SortBy.OriginalLanguage) or (SortDirection.Ascending, SortBy.Overview) or (SortDirection.Ascending, SortBy.Genre) or (SortDirection.Ascending, SortBy.Title) => currentResponse.AsQueryable().OrderBy((Expression<Func<Movie, string>>)orderExpression).ToList(),
+                (SortDirection.Descending, SortBy.OriginalLanguage) or (SortDirection.Descending, SortBy.Overview) or (SortDirection.Descending, SortBy.Genre) or (SortDirection.Descending, SortBy.Title) => currentResponse.AsQueryable().OrderByDescending((Expression<Func<Movie, string>>)orderExpression).ToList(),
+                (SortDirection.Ascending, SortBy.VoteAverage) => currentResponse.AsQueryable().OrderBy((Expression<Func<Movie, double>>)orderExpression).ToList(),
+                (SortDirection.Descending, SortBy.VoteAverage) => currentResponse.AsQueryable().OrderByDescending((Expression<Func<Movie, double>>)orderExpression).ToList(),
+                (SortDirection.Ascending, SortBy.ReleaseDate) => currentResponse.AsQueryable().OrderBy((Expression<Func<Movie, DateTime?>>)orderExpression).ToList(),
+                (SortDirection.Descending, SortBy.ReleaseDate) => currentResponse.AsQueryable().OrderByDescending((Expression<Func<Movie, DateTime?>>)orderExpression).ToList(),
+                _ => currentResponse.AsQueryable().OrderBy((Expression<Func<Movie, string>>)orderExpression).ToList(),
+            };
         }
 
-        private static Expression<Func<Movie, string>> ExtractOrderExpression(MoviesQuery query)
+        private static (Expression, Type) ExtractOrderExpression(MoviesQuery query)
         {
             PropertyInfo property = typeof(Movie).GetProperty(query.SortBy.ToString(), BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
             var parameter = Expression.Parameter(typeof(Movie), "p");
             var propertyAccess = Expression.MakeMemberAccess(parameter, property);
+            var type = property.PropertyType;
+            var lambda = Expression.Lambda(propertyAccess, parameter);
 
-            return (Expression<Func<Movie, string>>)Expression.Lambda(propertyAccess, parameter);
+            return (lambda, type);
         }
 
 

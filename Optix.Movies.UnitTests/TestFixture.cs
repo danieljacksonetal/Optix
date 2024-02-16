@@ -27,6 +27,12 @@ namespace Optix.Movies.UnitTests
             Movies[2].Title = "SortedByGenre";
             Movies[2].Genre = "aaaaaaaaaaaaa";
 
+            Movies[3].Title = "SortedByVoteAverage";
+            Movies[3].VoteAverage = 0;
+
+            Movies[4].Title = "SortedByDateTime";
+            Movies[4].ReleaseDate = DateTime.UtcNow.AddYears(3);
+
             var moviesDbSet = Movies.AsQueryable().BuildMockDbSet();
             MoviesContext.Movies.Returns(moviesDbSet);
 
@@ -40,6 +46,6 @@ namespace Optix.Movies.UnitTests
             };
         }
 
-        private List<Movie> CreateMovies() => AutoFixture.Build<Movie>().CreateMany(20).ToList();
+        private List<Movie> CreateMovies() => AutoFixture.Build<Movie>().With(x => x.VoteAverage, 10).CreateMany(20).ToList();
     }
 }

@@ -48,7 +48,7 @@ namespace Optix.Movies.UnitTests.Application.Handlers
         [Theory]
         [InlineData(SortDirection.Descending, SortBy.Genre)]
         [InlineData(SortDirection.Ascending, SortBy.Genre)]
-        public async Task Handle_Should_Order_By_Query_SortBy_Direction(SortDirection sortDirection, SortBy sortBy)
+        public async Task Handle_Should_Order_By_Genre_And_SortBy_Direction(SortDirection sortDirection, SortBy sortBy)
         {
             MoviesQuery.SortDirection = sortDirection;
             MoviesQuery.SortBy = sortBy;
@@ -65,6 +65,52 @@ namespace Optix.Movies.UnitTests.Application.Handlers
             else
             {
                 response.Movies.Last().Title.ShouldBe("SortedByGenre");
+            }
+        }
+
+        [Theory]
+        [InlineData(SortDirection.Descending, SortBy.ReleaseDate)]
+        [InlineData(SortDirection.Ascending, SortBy.ReleaseDate)]
+        public async Task Handle_Should_Order_By_ReleaseDate_And_SortBy_Direction(SortDirection sortDirection, SortBy sortBy)
+        {
+            MoviesQuery.SortDirection = sortDirection;
+            MoviesQuery.SortBy = sortBy;
+            MoviesQuery.SearchTerm = null;
+            MoviesQuery.PageSize = 20;
+
+            var response = await _handler.Handle(MoviesQuery, default);
+
+            response.ShouldNotBeNull();
+            if (sortDirection == SortDirection.Ascending)
+            {
+                response.Movies.Last().Title.ShouldBe("SortedByDateTime");
+            }
+            else
+            {
+                response.Movies.First().Title.ShouldBe("SortedByDateTime");
+            }
+        }
+
+        [Theory]
+        [InlineData(SortDirection.Descending, SortBy.VoteAverage)]
+        [InlineData(SortDirection.Ascending, SortBy.VoteAverage)]
+        public async Task Handle_Should_Order_By_VoteAverage_And_SortBy_Direction(SortDirection sortDirection, SortBy sortBy)
+        {
+            MoviesQuery.SortDirection = sortDirection;
+            MoviesQuery.SortBy = sortBy;
+            MoviesQuery.SearchTerm = null;
+            MoviesQuery.PageSize = 20;
+
+            var response = await _handler.Handle(MoviesQuery, default);
+
+            response.ShouldNotBeNull();
+            if (sortDirection == SortDirection.Ascending)
+            {
+                response.Movies.First().Title.ShouldBe("SortedByVoteAverage");
+            }
+            else
+            {
+                response.Movies.Last().Title.ShouldBe("SortedByVoteAverage");
             }
         }
 
