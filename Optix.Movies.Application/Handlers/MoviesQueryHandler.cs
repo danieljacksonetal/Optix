@@ -58,7 +58,7 @@ namespace Optix.Movies.Infrastructure.Models
 
         private static List<Movie> SortResponse(MoviesQuery query, List<Movie> currentResponse)
         {
-            var (orderExpression, type) = ExtractOrderExpression(query);
+            var orderExpression = ExtractOrderExpression(query);
 
             return (query.SortDirection, query.SortBy)
             switch
@@ -73,15 +73,14 @@ namespace Optix.Movies.Infrastructure.Models
             };
         }
 
-        private static (Expression, Type) ExtractOrderExpression(MoviesQuery query)
+        private static Expression ExtractOrderExpression(MoviesQuery query)
         {
             PropertyInfo property = typeof(Movie).GetProperty(query.SortBy.ToString(), BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
             var parameter = Expression.Parameter(typeof(Movie), "p");
             var propertyAccess = Expression.MakeMemberAccess(parameter, property);
-            var type = property.PropertyType;
             var lambda = Expression.Lambda(propertyAccess, parameter);
 
-            return (lambda, type);
+            return lambda;
         }
 
 
