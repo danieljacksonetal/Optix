@@ -296,3 +296,8 @@ __pycache__/
 
 #Using appsettings in dev instead of environment variables
 appsettings.*.json
+.vs
+obj
+bin
+/Optix.Movies/.vs/Optix.Movies/v17/.suo
+/Optix.Movies/obj/Debug/net6.0/ref/Optix.Movies.dll
