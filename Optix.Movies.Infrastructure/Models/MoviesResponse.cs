@@ -1,5 +1,5 @@
 ﻿using Optix.Movies.Infrastructure.Database.Entities;
-using PagedList;
+using PagedList.Core;
 
 namespace Optix.Movies.Infrastructure.Models
 {

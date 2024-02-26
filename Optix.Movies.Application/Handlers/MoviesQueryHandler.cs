@@ -20,7 +20,7 @@ namespace Optix.Movies.Infrastructure.Models
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<MoviesResponse> Handle(MoviesQuery query, CancellationToken cancellationToken)
+        public Task<MoviesResponse> Handle(MoviesQuery query, CancellationToken cancellationToken)
         {
             _logger.LogDebug("query received {query}", JsonConvert.SerializeObject(query));
 
@@ -42,7 +42,7 @@ namespace Optix.Movies.Infrastructure.Models
 
                 var ordered = SortResponse(query, response);
 
-                return MoviesResponse.Create(ordered.ToPagedList(query.Page - 1, query.PageSize));
+                return Task.FromResult(MoviesResponse.Create(ordered.ToPagedList(query.Page - 1, query.PageSize)));
 
             }
             catch (Exception ex)
@@ -50,7 +50,7 @@ namespace Optix.Movies.Infrastructure.Models
                 _logger.LogError("An error occurred while processing the query: {message}", ex.Message);
 
                 // assuming we are going straight back to a client, dont expose the exception or message                
-                return MoviesResponse.Create(new PagedList<Movie>(new List<Movie>(), query.Page - 1, query.PageSize), false, "An error occurred while processing the query");
+                return Task.FromResult(MoviesResponse.Create(new PagedList<Movie>(new List<Movie>(), query.Page - 1, query.PageSize), false, "An error occurred while processing the query"));
             }
         }
 
