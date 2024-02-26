@@ -1,4 +1,5 @@
 ﻿using Optix.Movies.Infrastructure.Database.Entities;
+using PagedList;
 
 namespace Optix.Movies.Infrastructure.Models
 {
@@ -6,9 +7,9 @@ namespace Optix.Movies.Infrastructure.Models
     {
         public bool Success { get; set; }
         public string Error { get; set; }
-        public List<Movie> Movies { get; set; }
+        public IPagedList<Movie> Movies { get; set; }
 
-        public static MoviesResponse Create(List<Movie> movies, bool success = true, string error = null)
+        public static MoviesResponse Create(IPagedList<Movie> movies, bool success = true, string error = null)
         {
             return new MoviesResponse()
             {

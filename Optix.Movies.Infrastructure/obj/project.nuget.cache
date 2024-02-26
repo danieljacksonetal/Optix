@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "iZQ+SjlPR3DvUx3ShsDJZm2s44nSRgtTHgAu4R11bA5L2Lq/PyaxuMKzGrLYuu7uJjZ+lFahV9a9xm56z6Q/YQ==",
+  "dgSpecHash": "9xFv6Yf13GgqYqipQ9KoxfM5i4qiwudxZuUUr4lGJZ09uhNaMK6QsrvZ/U1AQ/n1j/UV1yM8ihdfqA/RpFH7SA==",
   "success": true,
   "projectFilePath": "C:\\git\\testing\\Optix\\Optix.Movies.Infrastructure\\Optix.Movies.Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -43,6 +43,8 @@
     "C:\\Users\\daniel.jackson\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\daniel.jackson\\.nuget\\packages\\npgsql\\7.0.6\\npgsql.7.0.6.nupkg.sha512",
     "C:\\Users\\daniel.jackson\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\7.0.11\\npgsql.entityframeworkcore.postgresql.7.0.11.nupkg.sha512",
+    "C:\\Users\\daniel.jackson\\.nuget\\packages\\pagedlist.core\\1.17.4\\pagedlist.core.1.17.4.nupkg.sha512",
+    "C:\\Users\\daniel.jackson\\.nuget\\packages\\pagedlist.core.mvc\\3.0.0\\pagedlist.core.mvc.3.0.0.nupkg.sha512",
     "C:\\Users\\daniel.jackson\\.nuget\\packages\\system.configuration.configurationmanager\\6.0.1\\system.configuration.configurationmanager.6.0.1.nupkg.sha512",
     "C:\\Users\\daniel.jackson\\.nuget\\packages\\system.diagnostics.diagnosticsource\\6.0.1\\system.diagnostics.diagnosticsource.6.0.1.nupkg.sha512",
     "C:\\Users\\daniel.jackson\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",

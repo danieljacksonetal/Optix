@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Optix.Movies.Infrastructure.Database;
 using Optix.Movies.Infrastructure.Database.Entities;
+using PagedList.Core;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -24,27 +24,25 @@ namespace Optix.Movies.Infrastructure.Models
         {
             _logger.LogDebug("query received {query}", JsonConvert.SerializeObject(query));
 
-            List<Movie> response = null;
+            IQueryable<Movie> response = null;
             try
             {
 
                 if (!string.IsNullOrEmpty(query.SearchTerm))
                 {
-                    response = await _context.Movies.Where(x =>
+                    response = _context.Movies.Where(x =>
                         x.Title != null && x.Title.ToLower().Contains(query.SearchTerm.ToLower()) ||
                         x.Overview != null && x.Overview.ToLower().Contains(query.SearchTerm.ToLower()) ||
-                        x.Genre != null && x.Genre.ToLower().Contains(query.SearchTerm.ToLower())).ToListAsync(cancellationToken);
+                        x.Genre != null && x.Genre.ToLower().Contains(query.SearchTerm.ToLower()));
                 }
                 else
                 {
-                    response = await _context.Movies.ToListAsync(cancellationToken);
+                    response = _context.Movies;
                 }
 
-                response = SortResponse(query, response);
+                var ordered = SortResponse(query, response);
 
-                var paged = response.Skip((query.Page - 1) * query.PageSize).Take(query.PageSize).ToList();
-
-                return MoviesResponse.Create(paged);
+                return MoviesResponse.Create(ordered.ToPagedList(query.Page - 1, query.PageSize));
 
             }
             catch (Exception ex)
@@ -52,19 +50,19 @@ namespace Optix.Movies.Infrastructure.Models
                 _logger.LogError("An error occurred while processing the query: {message}", ex.Message);
 
                 // assuming we are going straight back to a client, dont expose the exception or message                
-                return MoviesResponse.Create(new List<Movie>(), false, "An error occurred while processing the query");
+                return MoviesResponse.Create(new PagedList<Movie>(new List<Movie>(), query.Page - 1, query.PageSize), false, "An error occurred while processing the query");
             }
         }
 
-        private static List<Movie> SortResponse(MoviesQuery query, List<Movie> currentResponse)
+        private static IOrderedEnumerable<Movie> SortResponse(MoviesQuery query, IQueryable<Movie> currentResponse)
         {
             var orderExpression = ExtractOrderExpression(query);
 
             return query.SortDirection switch
             {
-                SortDirection.Ascending => currentResponse.AsQueryable().OrderBy(orderExpression.Compile()).ToList(),
-                SortDirection.Descending => currentResponse.AsQueryable().OrderByDescending(orderExpression.Compile()).ToList(),
-                _ => currentResponse.AsQueryable().OrderBy(orderExpression.Compile()).ToList(),
+                SortDirection.Ascending => currentResponse.OrderBy(orderExpression.Compile()),
+                SortDirection.Descending => currentResponse.OrderByDescending(orderExpression.Compile()),
+                _ => currentResponse.OrderBy(orderExpression.Compile()),
             };
         }
 
